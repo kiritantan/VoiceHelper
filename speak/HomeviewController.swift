@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeviewController.swift
 //  speak
 //
 //  Created by kiri on 2015/05/08.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeviewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -13,6 +13,8 @@
 		4B4264F41AFCFDA4007FA2AA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B4264F31AFCFDA4007FA2AA /* Images.xcassets */; };
 		4B4264F71AFCFDA4007FA2AA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B4264F51AFCFDA4007FA2AA /* LaunchScreen.xib */; };
 		4B4265031AFCFDA4007FA2AA /* speakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4265021AFCFDA4007FA2AA /* speakTests.swift */; };
+		4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650C1AFD17D1007FA2AA /* EditViewController.swift */; };
+		4B42650F1AFD2608007FA2AA /* SpeakModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650E1AFD2608007FA2AA /* SpeakModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		4B4264FC1AFCFDA4007FA2AA /* speakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = speakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4265011AFCFDA4007FA2AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B4265021AFCFDA4007FA2AA /* speakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = speakTests.swift; sourceTree = "<group>"; };
+		4B42650C1AFD17D1007FA2AA /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		4B42650E1AFD2608007FA2AA /* SpeakModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +83,8 @@
 			children = (
 				4B4264EC1AFCFDA4007FA2AA /* AppDelegate.swift */,
 				4B4264EE1AFCFDA4007FA2AA /* HomeviewController.swift */,
+				4B42650C1AFD17D1007FA2AA /* EditViewController.swift */,
+				4B42650E1AFD2608007FA2AA /* SpeakModel.swift */,
 				4B4264F01AFCFDA4007FA2AA /* Main.storyboard */,
 				4B4264F31AFCFDA4007FA2AA /* Images.xcassets */,
 				4B4264F51AFCFDA4007FA2AA /* LaunchScreen.xib */,
@@ -212,8 +218,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B42650F1AFD2608007FA2AA /* SpeakModel.swift in Sources */,
 				4B4264EF1AFCFDA4007FA2AA /* HomeviewController.swift in Sources */,
 				4B4264ED1AFCFDA4007FA2AA /* AppDelegate.swift in Sources */,
+				4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +419,7 @@
 				4B4265081AFCFDA4007FA2AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4B4265091AFCFDA4007FA2AA /* Build configuration list for PBXNativeTarget "speakTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +428,7 @@
 				4B42650B1AFCFDA4007FA2AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

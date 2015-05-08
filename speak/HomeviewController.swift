@@ -10,24 +10,58 @@ import UIKit
 
 class HomeviewController: UIViewController,UITextViewDelegate {
 
+    let ud = NSUserDefaults.standardUserDefaults()
+    let speaker = SpeakModel()
+    
     @IBOutlet var textView: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         initTextView()
+        initUserDefaults()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        speaker.registerSpeaker(textView.text)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-
     func initTextView() {
         textView.delegate = self
-        textView.userInteractionEnabled = false
         textView.returnKeyType = UIReturnKeyType.Done
+    }
+    
+    func initUserDefaults(){
+        ud.registerDefaults(["languageID":0,"rate":0.25,"pitch":1.0])
+        speaker.registerSpeaker(textView.text)
+    }
+    
+    @IBAction func didTapModalEditViewButton(sender: AnyObject) {
+        speaker.stopSpeak()
+        self.performSegueWithIdentifier("modal", sender: self)
+    }
+    
+    
+    @IBAction func didTapPlayButton(sender: AnyObject) {
+        speaker.startSpeak()
+    }
+    
+    @IBAction func didTapPauseButton(sender: AnyObject) {
+        speaker.pauseSpeak()
+    }
+    
+    @IBAction func didTapStopButton(sender: AnyObject) {
+        speaker.stopSpeak()
+    }
+    
+    @IBAction func didTapEditTextViewButton(sender: AnyObject) {
+        speaker.stopSpeak()
+        self.textView.becomeFirstResponder()
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -35,17 +69,13 @@ class HomeviewController: UIViewController,UITextViewDelegate {
             return true
         }
         textView.resignFirstResponder()
+        speaker.registerSpeaker(textView.text)
         return false
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.textView.resignFirstResponder()
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        return true
     }
-    
-    @IBAction func didTapEditTextViewButton(sender: AnyObject) {
-        self.textView.becomeFirstResponder()
-    }
-    
     
 }
 

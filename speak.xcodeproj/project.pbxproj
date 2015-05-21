@@ -15,6 +15,9 @@
 		4B4265031AFCFDA4007FA2AA /* speakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4265021AFCFDA4007FA2AA /* speakTests.swift */; };
 		4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650C1AFD17D1007FA2AA /* EditViewController.swift */; };
 		4B42650F1AFD2608007FA2AA /* SpeakModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650E1AFD2608007FA2AA /* SpeakModel.swift */; };
+		4BBE408D1B0DF96F00D8A14C /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */; };
+		4BBE408F1B0E049E00D8A14C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4BBE408E1B0E049E00D8A14C /* Settings.bundle */; };
+		4BD6541D1B0D7C0300C0D3B4 /* FrameBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD6541C1B0D7C0300C0D3B4 /* FrameBorderButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,9 @@
 		4B4265021AFCFDA4007FA2AA /* speakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = speakTests.swift; sourceTree = "<group>"; };
 		4B42650C1AFD17D1007FA2AA /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		4B42650E1AFD2608007FA2AA /* SpeakModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakModel.swift; sourceTree = "<group>"; };
+		4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
+		4BBE408E1B0E049E00D8A14C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		4BD6541C1B0D7C0300C0D3B4 /* FrameBorderButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameBorderButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,10 +88,11 @@
 			isa = PBXGroup;
 			children = (
 				4B4264EC1AFCFDA4007FA2AA /* AppDelegate.swift */,
-				4B4264EE1AFCFDA4007FA2AA /* HomeviewController.swift */,
-				4B42650C1AFD17D1007FA2AA /* EditViewController.swift */,
-				4B42650E1AFD2608007FA2AA /* SpeakModel.swift */,
+				4BBE40901B0E04B300D8A14C /* ViewController */,
+				4BBE40911B0E04C800D8A14C /* model */,
+				4BBE40921B0E04DC00D8A14C /* subclass */,
 				4B4264F01AFCFDA4007FA2AA /* Main.storyboard */,
+				4BBE408E1B0E049E00D8A14C /* Settings.bundle */,
 				4B4264F31AFCFDA4007FA2AA /* Images.xcassets */,
 				4B4264F51AFCFDA4007FA2AA /* LaunchScreen.xib */,
 				4B4264EA1AFCFDA4007FA2AA /* Supporting Files */,
@@ -116,6 +123,32 @@
 				4B4265011AFCFDA4007FA2AA /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4BBE40901B0E04B300D8A14C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4B4264EE1AFCFDA4007FA2AA /* HomeviewController.swift */,
+				4B42650C1AFD17D1007FA2AA /* EditViewController.swift */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		4BBE40911B0E04C800D8A14C /* model */ = {
+			isa = PBXGroup;
+			children = (
+				4B42650E1AFD2608007FA2AA /* SpeakModel.swift */,
+				4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
+		4BBE40921B0E04DC00D8A14C /* subclass */ = {
+			isa = PBXGroup;
+			children = (
+				4BD6541C1B0D7C0300C0D3B4 /* FrameBorderButton.swift */,
+			);
+			name = subclass;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -167,6 +200,7 @@
 				TargetAttributes = {
 					4B4264E61AFCFDA4007FA2AA = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = RM3N4N4RRF;
 					};
 					4B4264FB1AFCFDA4007FA2AA = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -198,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4BBE408F1B0E049E00D8A14C /* Settings.bundle in Resources */,
 				4B4264F21AFCFDA4007FA2AA /* Main.storyboard in Resources */,
 				4B4264F71AFCFDA4007FA2AA /* LaunchScreen.xib in Resources */,
 				4B4264F41AFCFDA4007FA2AA /* Images.xcassets in Resources */,
@@ -222,6 +257,8 @@
 				4B4264EF1AFCFDA4007FA2AA /* HomeviewController.swift in Sources */,
 				4B4264ED1AFCFDA4007FA2AA /* AppDelegate.swift in Sources */,
 				4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */,
+				4BD6541D1B0D7C0300C0D3B4 /* FrameBorderButton.swift in Sources */,
+				4BBE408D1B0DF96F00D8A14C /* SSRadioButtonsController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +387,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = speak/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -360,6 +398,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = speak/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

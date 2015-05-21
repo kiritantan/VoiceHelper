@@ -18,9 +18,9 @@ class SpeakModel: NSObject {
     func registerSpeaker(text:String) {
         utterance = AVSpeechUtterance(string:text)
         switch ud.integerForKey("languageID") {
-        case 0:
+        case 10:
             utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-        case 1:
+        case 11:
             utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         default:
             break

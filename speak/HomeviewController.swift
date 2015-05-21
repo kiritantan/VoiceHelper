@@ -19,6 +19,7 @@ class HomeviewController: UIViewController,UITextViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.title = "speak"
+        textView.contentInset = UIEdgeInsetsMake(-60, 0, 0, 0)
         initTextView()
         initUserDefaults()
     }
@@ -60,7 +61,17 @@ class HomeviewController: UIViewController,UITextViewDelegate {
         speaker.stopSpeak()
     }
     
-    @IBAction func didTapEditTextViewButton(sender: AnyObject) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        if let touch = touches.first as? UITouch {
+            if touch.view.tag == 1 {
+                endEditOfTextView()
+            }
+        }
+        
+    }
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        textView.text = ""
         speaker.stopSpeak()
         self.textView.becomeFirstResponder()
     }
@@ -69,13 +80,13 @@ class HomeviewController: UIViewController,UITextViewDelegate {
         if text != "\n" {
             return true
         }
-        textView.resignFirstResponder()
-        speaker.registerSpeaker(textView.text)
+        endEditOfTextView()
         return false
     }
     
-    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
-        return true
+    func endEditOfTextView() {
+        textView.resignFirstResponder()
+        speaker.registerSpeaker(textView.text)
     }
     
 }

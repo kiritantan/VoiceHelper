@@ -429,8 +429,7 @@
                                         <include reference="Q0p-1L-LBU"/>
                                     </mask>
                                 </variation>
-                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                    <rect key="frame" x="480" y="128" width="264" height="66"/>
+                                <variation key="heightClass=regular-widthClass=regular">
                                     <mask key="constraints">
                                         <include reference="GZv-BQ-mPY"/>
                                         <include reference="qLz-vc-hVh"/>

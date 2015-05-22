@@ -57,12 +57,12 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             
             button.setTranslatesAutoresizingMaskIntoConstraints(true)
             
-            if button.tag == 21 {
-                button.frame = CGRectMake(uiviewWidth - 2*(uiviewWidth/5) - 16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
-            } else {
+            if button.tag == ud.integerForKey("audioButtonID") {
                 button.frame = CGRectMake(16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
+            } else {
+                button.frame = CGRectMake(uiviewWidth - 2*(uiviewWidth/5) - 16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
             }
-            
+        
         }
     }
     

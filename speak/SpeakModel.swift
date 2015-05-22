@@ -30,19 +30,23 @@ class SpeakModel: NSObject {
     }
     
     func startSpeak() {
-        if self.speaker.paused {
-            self.speaker.continueSpeaking()
+        if speaker.paused {
+            speaker.continueSpeaking()
         } else if !self.speaker.speaking {
-            self.speaker.speakUtterance(utterance)
+            speaker.speakUtterance(utterance)
         }
     }
     
     func pauseSpeak() {
-        self.speaker.pauseSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        speaker.pauseSpeakingAtBoundary(AVSpeechBoundary.Immediate)
     }
     
     func stopSpeak() {
-        self.speaker.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        speaker.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+    }
+    
+    func speakPhrase() {
+        speaker.speakUtterance(utterance)
     }
     
 }

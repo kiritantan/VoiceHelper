@@ -45,7 +45,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func initUserDefaults(){
-        ud.registerDefaults(["languageID":10,"audioButtonID":20,"rate":0.25,"pitch":1.0])
+        ud.registerDefaults(["languageID":10,"audioButtonID":20,"rate":0.25,"pitch":1.0,"favoritePhraseArray":[]])
         speaker.registerSpeaker(textView.text)
     }
     

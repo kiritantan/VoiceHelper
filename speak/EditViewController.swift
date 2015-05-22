@@ -56,6 +56,8 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
         }
     }
     
+    
+    
     @IBAction func didTapDecisionButton(sender: AnyObject) {
         saveParams()
         self.dismissViewControllerAnimated(true, completion: nil)

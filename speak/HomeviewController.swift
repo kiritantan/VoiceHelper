@@ -7,25 +7,31 @@
 //
 
 import UIKit
+import AVFoundation
 
-class HomeviewController: UIViewController,UITextViewDelegate {
+class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesizerDelegate {
 
     let ud = NSUserDefaults.standardUserDefaults()
     let speaker = SpeakModel()
     
     @IBOutlet var textView: UITextView!
+    @IBOutlet var startPauseButton: FrameBorderButton!
+    @IBOutlet var stopButton: FrameBorderButton!
+    @IBOutlet var deleteTextButton: FrameBorderButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.title = "speak"
-        textView.contentInset = UIEdgeInsetsMake(-60, 0, 0, 0)
+        speaker.speaker.delegate = self
+//        textView.contentInset = UIEdgeInsetsMake(-60, 0, 0, 0)
         initTextView()
         initUserDefaults()
     }
 
     override func viewWillAppear(animated: Bool) {
         speaker.registerSpeaker(textView.text)
+        DefindLayoutOfAudioButtons()
     }
     
     override func didReceiveMemoryWarning() {
@@ -39,8 +45,25 @@ class HomeviewController: UIViewController,UITextViewDelegate {
     }
     
     func initUserDefaults(){
-        ud.registerDefaults(["languageID":0,"rate":0.25,"pitch":1.0])
+        ud.registerDefaults(["languageID":10,"audioButtonID":20,"rate":0.25,"pitch":1.0])
         speaker.registerSpeaker(textView.text)
+    }
+    
+    func DefindLayoutOfAudioButtons() {
+        let uiviewWidth  = self.view.frame.width
+        let uiviewHeight = self.view.frame.height
+        
+        for button in [startPauseButton,stopButton] {
+            
+            button.setTranslatesAutoresizingMaskIntoConstraints(true)
+            
+            if button.tag == 21 {
+                button.frame = CGRectMake(uiviewWidth - 2*(uiviewWidth/5) - 16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
+            } else {
+                button.frame = CGRectMake(16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
+            }
+            
+        }
     }
     
     @IBAction func didTapModalEditViewButton(sender: AnyObject) {
@@ -49,16 +72,19 @@ class HomeviewController: UIViewController,UITextViewDelegate {
     }
     
     
-    @IBAction func didTapPlayButton(sender: AnyObject) {
-        speaker.startSpeak()
-    }
-    
-    @IBAction func didTapPauseButton(sender: AnyObject) {
-        speaker.pauseSpeak()
+    @IBAction func didTapPlayPauseButton(sender: AnyObject) {
+        if speaker.speaker.paused || !speaker.speaker.speaking {
+            speaker.startSpeak()
+            startPauseButton.setTitle("Pause", forState: UIControlState.Normal)
+        } else {
+            speaker.pauseSpeak()
+            startPauseButton.setTitle("Resume", forState: UIControlState.Normal)
+        }
     }
     
     @IBAction func didTapStopButton(sender: AnyObject) {
         speaker.stopSpeak()
+        startPauseButton.setTitle("Play", forState: UIControlState.Normal)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -67,13 +93,15 @@ class HomeviewController: UIViewController,UITextViewDelegate {
                 endEditOfTextView()
             }
         }
-        
     }
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    @IBAction func didTapDeleteTextButton(sender: AnyObject) {
         textView.text = ""
+    }
+    func textViewDidBeginEditing(textView: UITextView) {
         speaker.stopSpeak()
         self.textView.becomeFirstResponder()
+        deleteTextButton.hidden = true;
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -85,8 +113,13 @@ class HomeviewController: UIViewController,UITextViewDelegate {
     }
     
     func endEditOfTextView() {
+        deleteTextButton.hidden = false
         textView.resignFirstResponder()
         speaker.registerSpeaker(textView.text)
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
+        startPauseButton.setTitle("Play", forState: UIControlState.Normal)
     }
     
 }

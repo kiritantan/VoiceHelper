@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B29041E1B0F884A0049D9CA /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B29041D1B0F884A0049D9CA /* FavoriteTableViewController.swift */; };
 		4B4264ED1AFCFDA4007FA2AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4264EC1AFCFDA4007FA2AA /* AppDelegate.swift */; };
 		4B4264EF1AFCFDA4007FA2AA /* HomeviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4264EE1AFCFDA4007FA2AA /* HomeviewController.swift */; };
 		4B4264F21AFCFDA4007FA2AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B4264F01AFCFDA4007FA2AA /* Main.storyboard */; };
@@ -15,7 +16,6 @@
 		4B4265031AFCFDA4007FA2AA /* speakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4265021AFCFDA4007FA2AA /* speakTests.swift */; };
 		4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650C1AFD17D1007FA2AA /* EditViewController.swift */; };
 		4B42650F1AFD2608007FA2AA /* SpeakModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650E1AFD2608007FA2AA /* SpeakModel.swift */; };
-		4B66D2571B0F6C4400CFFDD7 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B66D2561B0F6C4400CFFDD7 /* FavoriteTableViewController.swift */; };
 		4BBE408D1B0DF96F00D8A14C /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */; };
 		4BBE408F1B0E049E00D8A14C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4BBE408E1B0E049E00D8A14C /* Settings.bundle */; };
 		4BD6541D1B0D7C0300C0D3B4 /* FrameBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD6541C1B0D7C0300C0D3B4 /* FrameBorderButton.swift */; };
@@ -32,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4B29041D1B0F884A0049D9CA /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		4B4264E71AFCFDA4007FA2AA /* speak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = speak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4264EB1AFCFDA4007FA2AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4B4264EC1AFCFDA4007FA2AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -44,7 +45,6 @@
 		4B4265021AFCFDA4007FA2AA /* speakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = speakTests.swift; sourceTree = "<group>"; };
 		4B42650C1AFD17D1007FA2AA /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		4B42650E1AFD2608007FA2AA /* SpeakModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakModel.swift; sourceTree = "<group>"; };
-		4B66D2561B0F6C4400CFFDD7 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FavoriteTableViewController.swift; path = ../../../../Desktop/FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
 		4BBE408E1B0E049E00D8A14C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4BD6541C1B0D7C0300C0D3B4 /* FrameBorderButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameBorderButton.swift; sourceTree = "<group>"; };
@@ -132,7 +132,7 @@
 			children = (
 				4B4264EE1AFCFDA4007FA2AA /* HomeviewController.swift */,
 				4B42650C1AFD17D1007FA2AA /* EditViewController.swift */,
-				4B66D2561B0F6C4400CFFDD7 /* FavoriteTableViewController.swift */,
+				4B29041D1B0F884A0049D9CA /* FavoriteTableViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -262,7 +262,7 @@
 				4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */,
 				4BD6541D1B0D7C0300C0D3B4 /* FrameBorderButton.swift in Sources */,
 				4BBE408D1B0DF96F00D8A14C /* SSRadioButtonsController.swift in Sources */,
-				4B66D2571B0F6C4400CFFDD7 /* FavoriteTableViewController.swift in Sources */,
+				4B29041E1B0F884A0049D9CA /* FavoriteTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

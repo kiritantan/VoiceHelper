@@ -22,7 +22,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.title = "speak"
+        self.title = "ボイスヘルパー"
         speaker.speaker.delegate = self
 //        textView.contentInset = UIEdgeInsetsMake(-60, 0, 0, 0)
         initTextView()
@@ -75,16 +75,16 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     @IBAction func didTapPlayPauseButton(sender: AnyObject) {
         if speaker.speaker.paused || !speaker.speaker.speaking {
             speaker.startSpeak()
-            startPauseButton.setTitle("Pause", forState: UIControlState.Normal)
+            startPauseButton.setTitle("一時停止", forState: UIControlState.Normal)
         } else {
             speaker.pauseSpeak()
-            startPauseButton.setTitle("Resume", forState: UIControlState.Normal)
+            startPauseButton.setTitle("再開", forState: UIControlState.Normal)
         }
     }
     
     @IBAction func didTapStopButton(sender: AnyObject) {
         speaker.stopSpeak()
-        startPauseButton.setTitle("Play", forState: UIControlState.Normal)
+        startPauseButton.setTitle("再生", forState: UIControlState.Normal)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -97,6 +97,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     @IBAction func didTapDeleteTextButton(sender: AnyObject) {
         textView.text = ""
+        speaker.registerSpeaker(textView.text)
     }
     func textViewDidBeginEditing(textView: UITextView) {
         speaker.stopSpeak()

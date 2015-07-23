@@ -120,7 +120,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
-        startPauseButton.setTitle("Play", forState: UIControlState.Normal)
+        startPauseButton.setTitle("再生", forState: UIControlState.Normal)
     }
     
 }

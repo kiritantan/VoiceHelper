@@ -21,15 +21,15 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         self.title = "ボイスヘルパー"
         speaker.speaker.delegate = self
-//        textView.contentInset = UIEdgeInsetsMake(-60, 0, 0, 0)
         initTextView()
         initUserDefaults()
+        
     }
 
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         speaker.registerSpeaker(textView.text)
         DefindLayoutOfAudioButtons()
     }
@@ -90,33 +90,34 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         if let touch = touches.first as? UITouch {
             if touch.view.tag == 1 {
-                endEditOfTextView()
+                textView.resignFirstResponder()
             }
         }
     }
     
     @IBAction func didTapDeleteTextButton(sender: AnyObject) {
+        speaker.stopSpeak()
         textView.text = ""
         speaker.registerSpeaker(textView.text)
     }
+    
     func textViewDidBeginEditing(textView: UITextView) {
         speaker.stopSpeak()
-        self.textView.becomeFirstResponder()
         deleteTextButton.hidden = true;
+        textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.endOfDocument)
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        deleteTextButton.hidden = false
+        speaker.registerSpeaker(textView.text)
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if text != "\n" {
             return true
         }
-        endEditOfTextView()
-        return false
-    }
-    
-    func endEditOfTextView() {
-        deleteTextButton.hidden = false
         textView.resignFirstResponder()
-        speaker.registerSpeaker(textView.text)
+        return false
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {

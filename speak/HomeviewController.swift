@@ -9,6 +9,14 @@
 import UIKit
 import AVFoundation
 
+extension UITextView {
+    func selectTextAtRange(range:NSRange) {
+        let start = self.positionFromPosition(self.beginningOfDocument, offset: range.location)
+        let end   = self.positionFromPosition(start!, offset: range.length)
+        self.selectedTextRange = self.textRangeFromPosition(start, toPosition: end);
+    }
+}
+
 class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesizerDelegate {
 
     let ud = NSUserDefaults.standardUserDefaults()
@@ -95,10 +103,19 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         speaker.registerSpeaker(textView.text)
     }
     
+    func textViewShouldBeginEditing(textView: UITextView) -> Bool {
+        let delay = 0.1 * Double(NSEC_PER_SEC)
+        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue(), {
+            textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.endOfDocument)
+        })
+        return true
+    }
+    
     func textViewDidBeginEditing(textView: UITextView) {
         speaker.stopSpeak()
         deleteTextButton.hidden = true;
-        textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.endOfDocument)
+        textView.selectTextAtRange(NSRange(location: 1, length: 5))
     }
     
     func textViewDidEndEditing(textView: UITextView) {

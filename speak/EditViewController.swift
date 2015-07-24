@@ -44,6 +44,50 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
         }
         selectRateSlider.value = ud.floatForKey("rate")
         selectPitchSlider.value = ud.floatForKey("pitch")
+        let deviceOrientation: UIInterfaceOrientation!  = UIApplication.sharedApplication().statusBarOrientation
+        if deviceOrientation.isLandscape {
+            if Int( UIScreen.mainScreen().bounds.size.width) <= 736 {
+                selectRateSlider.hidden = true
+                selectPitchSlider.hidden = true
+            }
+        } else {
+            selectRateSlider.hidden = false
+            selectPitchSlider.hidden = false
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onOrientationChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        // 現在のデバイスの向きを取得.
+        let deviceOrientation: UIInterfaceOrientation!  = UIApplication.sharedApplication().statusBarOrientation
+        if deviceOrientation.isLandscape {
+            if Int( UIScreen.mainScreen().bounds.size.width) <= 736 {
+                selectRateSlider.hidden = true
+                selectPitchSlider.hidden = true
+            }
+        } else {
+            selectRateSlider.hidden = false
+            selectPitchSlider.hidden = false
+        }
+    }
+    
+    // 端末の向きがかわったら呼び出される.
+    func onOrientationChange(notification: NSNotification){
+        
+        let deviceOrientation: UIInterfaceOrientation!  = UIApplication.sharedApplication().statusBarOrientation
+        if deviceOrientation.isLandscape {
+            if Int( UIScreen.mainScreen().bounds.size.width) <= 736 {
+                selectRateSlider.hidden = true
+                selectPitchSlider.hidden = true
+            }
+        } else {
+            selectRateSlider.hidden = false
+            selectPitchSlider.hidden = false
+        }
+        
     }
     
     func isSelectedButton(button:UIButton) -> Bool {

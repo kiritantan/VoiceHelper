@@ -15,27 +15,29 @@ protocol ModalViewControllerDelegate{
 class ModalViewController: UIViewController,UITextViewDelegate {
 
     var delegate: ModalViewControllerDelegate! = nil
-    let textView = UITextView()
+    
+    @IBOutlet var textView: UITextView!
+//    let textView = UITextView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
-        initTextView()
     }
     
     override func viewWillAppear(animated: Bool) {
+        initTextView()
         textView.text = ""
         textView.becomeFirstResponder()
     }
     
     func initTextView() {
-        textView.frame = CGRectMake(10, (self.view.frame.size.height)/10, self.view.frame.size.width-20, (self.view.frame.size.height*2)/5)
+//        textView.frame = CGRectMake(10, (self.view.frame.size.height)/10, self.view.frame.size.width-20, (self.view.frame.size.height*2)/5)
         textView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
         textView.layer.borderWidth  = 2
         textView.layer.cornerRadius = 10
         textView.delegate = self
         textView.returnKeyType = UIReturnKeyType.Done
-        self.view.addSubview(self.textView)
+//        self.view.addSubview(self.textView)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {

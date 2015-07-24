@@ -15,7 +15,7 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     @IBOutlet var tableView: UITableView!
     let realm = RLMRealm.defaultRealm()
     let speaker = SpeakModel()
-    let modalView = ModalViewController()
+    let modalView = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("modalView") as! ModalViewController
     var textArray: NSMutableArray = []
 
     override func viewDidLoad() {
@@ -29,12 +29,17 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        speaker.stopSpeak()
         textArray = []
         for realmPhrase in FavoritePhrase.allObjects() {
             textArray.addObject("\((realmPhrase as! FavoritePhrase).phrase)")
         }
         tableView.reloadData()
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        speaker.stopSpeak()
     }
     
     @IBAction func didTapAddCellButton(sender: AnyObject) {
@@ -95,7 +100,6 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
                 tableView.reloadData()
                 tableView.selectRowAtIndexPath(NSIndexPath(forRow: self.textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
             })
-            
         }
     }
     

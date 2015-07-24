@@ -9,14 +9,6 @@
 import UIKit
 import AVFoundation
 
-extension UITextView {
-//    func selectTextAtRange(range:NSRange) {
-//        let start = self.positionFromPosition(self.beginningOfDocument, offset: range.location)
-//        let end   = self.positionFromPosition(start!, offset: range.length)
-//        self.selectedTextRange = self.textRangeFromPosition(start, toPosition: end);
-//    }
-}
-
 class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesizerDelegate {
 
     let placeHolderString = "入力欄"
@@ -46,6 +38,11 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         default:
             break
         }
+        println(UIDevice.currentDevice().model)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        speaker.stopSpeak()
     }
 
     func initTextView() {
@@ -56,21 +53,35 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func initUserDefaults(){
-        ud.registerDefaults(["languageID":10,"audioButtonID":20,"rate":0.25,"pitch":1.0,"favoritePhraseArray":[]])
+        ud.registerDefaults(["languageID":10,"audioButtonID":21,"rate":0.25,"pitch":1.0,"favoritePhraseArray":[]])
         speaker.registerSpeaker(textView.text)
     }
     
     func DefindLayoutOfAudioButtons() {
-        for button in [startPauseButton,stopButton] {
-            button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-            if button.tag == ud.integerForKey("audioButtonID") {
-                button.setTitle("再生", forState: .Normal)
-                button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
-            } else {
-                button.setTitle("停止", forState: .Normal)
-                button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
+        if UIDevice.currentDevice().model == "iPad" {
+            for button in [startPauseButton,stopButton] {
+                button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+                if button.tag == ud.integerForKey("audioButtonID") {
+                    button.setTitle("再生", forState: .Normal)
+                    button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
+                } else {
+                    button.setTitle("停止", forState: .Normal)
+                    button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
+                }
+            }
+        } else {
+            for button in [startPauseButton,stopButton] {
+                button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+                if button.tag != ud.integerForKey("audioButtonID") {
+                    button.setTitle("再生", forState: .Normal)
+                    button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
+                } else {
+                    button.setTitle("停止", forState: .Normal)
+                    button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
+                }
             }
         }
+        
     }
     
     @IBAction func didTapPlayPauseButton(sender: AnyObject) {
@@ -103,6 +114,8 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         if let touch = touches.first as? UITouch {
             if touch.view.tag == 1 {
                 textView.resignFirstResponder()
+                startPauseButton.hidden = false
+                stopButton.hidden = false
             }
         }
     }
@@ -122,6 +135,8 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             textView.text = nil
             textView.textColor = UIColor.blackColor()
         }
+        startPauseButton.hidden = true
+        stopButton.hidden = true
     }
     
     func textViewDidEndEditing(textView: UITextView) {
@@ -130,6 +145,8 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             textView.textColor = UIColor.lightGrayColor()
         }
         speaker.registerSpeaker(textView.text)
+        startPauseButton.hidden = false
+        stopButton.hidden = false
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -141,10 +158,17 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
-        for button in [startPauseButton,stopButton] {
-            if button.tag == ud.integerForKey("audioButtonID") {
-                button.setTitle("再生", forState: .Normal)
-                button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
+        if UIDevice.currentDevice().model == "iPad" {
+            for button in [startPauseButton,stopButton] {
+                if button.tag == ud.integerForKey("audioButtonID") {
+                    button.setTitle("再生", forState: .Normal)
+                }
+            }
+        } else {
+            for button in [startPauseButton,stopButton] {
+                if button.tag != ud.integerForKey("audioButtonID") {
+                    button.setTitle("再生", forState: .Normal)
+                }
             }
         }
     }

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4B2719901B61EB0D005AEF5F /* PhraseCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B27198F1B61EB0D005AEF5F /* PhraseCategory.swift */; };
 		4B29041E1B0F884A0049D9CA /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B29041D1B0F884A0049D9CA /* FavoriteTableViewController.swift */; };
 		4B4264ED1AFCFDA4007FA2AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4264EC1AFCFDA4007FA2AA /* AppDelegate.swift */; };
 		4B4264EF1AFCFDA4007FA2AA /* HomeviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4264EE1AFCFDA4007FA2AA /* HomeviewController.swift */; };
@@ -40,7 +39,6 @@
 
 /* Begin PBXFileReference section */
 		114A80402EBD5E0C36372C6D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		4B27198F1B61EB0D005AEF5F /* PhraseCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhraseCategory.swift; sourceTree = "<group>"; };
 		4B29041D1B0F884A0049D9CA /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		4B4264E71AFCFDA4007FA2AA /* speak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = speak.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4264EB1AFCFDA4007FA2AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -171,7 +169,6 @@
 				4B42650E1AFD2608007FA2AA /* SpeakModel.swift */,
 				4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */,
 				4BC3C74B1B614A6F00417107 /* FavoritePhrase.swift */,
-				4B27198F1B61EB0D005AEF5F /* PhraseCategory.swift */,
 				4BC3C74F1B61532C00417107 /* RLMSupport.swift */,
 				4BC3C7551B61643300417107 /* AlertBuilder.swift */,
 				4BC3C7571B61644A00417107 /* UIAlertControllerExtension.swift */,
@@ -350,7 +347,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B42650F1AFD2608007FA2AA /* SpeakModel.swift in Sources */,
-				4B2719901B61EB0D005AEF5F /* PhraseCategory.swift in Sources */,
 				4BC3C7501B61532C00417107 /* RLMSupport.swift in Sources */,
 				4B4264EF1AFCFDA4007FA2AA /* HomeviewController.swift in Sources */,
 				4BC3C74C1B614A6F00417107 /* FavoritePhrase.swift in Sources */,

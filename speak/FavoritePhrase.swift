@@ -11,5 +11,4 @@ import Realm
 
 class FavoritePhrase : RLMObject {
     dynamic var phrase = ""
-    dynamic var categoryName = ""
 }

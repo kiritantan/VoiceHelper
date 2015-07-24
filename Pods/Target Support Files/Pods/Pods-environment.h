@@ -6,6 +6,12 @@
 // project.
 
 
+// Kamagari
+#define COCOAPODS_POD_AVAILABLE_Kamagari
+#define COCOAPODS_VERSION_MAJOR_Kamagari 0
+#define COCOAPODS_VERSION_MINOR_Kamagari 9
+#define COCOAPODS_VERSION_PATCH_Kamagari 0
+
 // Realm
 #define COCOAPODS_POD_AVAILABLE_Realm
 #define COCOAPODS_VERSION_MAJOR_Realm 0

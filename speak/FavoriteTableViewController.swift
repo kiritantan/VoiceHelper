@@ -8,24 +8,49 @@
 
 import UIKit
 import AVFoundation
+import Realm
 
-class FavoriteTableViewController: UITableViewController,AVSpeechSynthesizerDelegate {
+class FavoriteTableViewController: UITableViewController,AVSpeechSynthesizerDelegate,ModalViewControllerDelegate {
     
-    let ud = NSUserDefaults.standardUserDefaults()
+    let realm = RLMRealm.defaultRealm()
     let speaker = SpeakModel()
+    let modalView = ModalViewController()
     var textArray: NSMutableArray = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        let realm = RLMRealm.defaultRealm()
+//        let phrase1 = FavoritePhrase()
+//        let phrase2 = FavoritePhrase()
+//        let phrase3 = FavoritePhrase()
+//        let phrase4 = FavoritePhrase()
+//        phrase1.phrase = "おはようございます"
+//        phrase2.phrase = "こんにちは"
+//        phrase3.phrase = "こんばんわ"
+//        phrase4.phrase = "ありがとうございます"
+//        
+//        realm.transactionWithBlock() {
+//            realm.addObject(phrase1)
+//            realm.addObject(phrase2)
+//            realm.addObject(phrase3)
+//            realm.addObject(phrase4)
+//        }
+//
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         tableView.allowsSelectionDuringEditing = true
         speaker.speaker.delegate = self
         self.title = "お気に入りのフレーズ"
-        textArray = ["おはようございます","こんにちは","こんばんわ","ありがとうございます"]
+        modalView.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        textArray = []
+        for realmPhrase in FavoritePhrase.allObjects() {
+            textArray.addObject("\((realmPhrase as! FavoritePhrase).phrase)")
+        }
+        tableView.reloadData()
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
     }
 
@@ -53,6 +78,8 @@ class FavoriteTableViewController: UITableViewController,AVSpeechSynthesizerDele
         var cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         if indexPath.row != textArray.count {
             cell.textLabel?.text = textArray[indexPath.row] as? String
+        } else {
+            cell.textLabel?.text = ""
         }
         return cell
     }
@@ -89,14 +116,44 @@ class FavoriteTableViewController: UITableViewController,AVSpeechSynthesizerDele
     }
     
     func addCell(sender: AnyObject) {
-        textArray.addObject("add Cell")
-        tableView.reloadData()
+        self.presentViewController(modalView, animated: true, completion: nil)
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
+            realm.beginWriteTransaction()
+            realm.deleteObjects(FavoritePhrase.objectsWhere("phrase = '\(textArray[indexPath.row])'"))
+            realm.commitWriteTransaction()
             textArray.removeObjectAtIndex(indexPath.row)
             tableView.reloadData()
+            tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+        }
+    }
+    
+    func modalDidFinished(modalText: String){
+        var flag = true;
+        let results = FavoritePhrase.objectsWhere("phrase = '\(modalText)'")
+        for realmBook in results {
+            flag = false;
+        }
+        if flag {
+            let phrase = FavoritePhrase()
+            phrase.phrase = modalText
+            realm.transactionWithBlock() {
+                self.realm.addObject(phrase)
+            }
+            textArray.addObject(modalText)
+            tableView.reloadData()
+            tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+            self.modalView.dismissViewControllerAnimated(true, completion: nil)
+        } else {
+            AlertBuilder(title: "このフレーズは登録済みです", message: "編集を続けますか?", preferredStyle: .Alert)
+                .addAction(title: "いいえ", style: .Cancel) { Void in
+                    self.modalView.dismissViewControllerAnimated(true, completion: nil)
+                }
+                .addAction(title: "はい", style: .Default) { _ in }
+                .build()
+                .kam_show(animated: true)
         }
     }
 

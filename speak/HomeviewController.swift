@@ -61,41 +61,42 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func DefindLayoutOfAudioButtons() {
-        let uiviewWidth  = self.view.frame.width
-        let uiviewHeight = self.view.frame.height
-        
         for button in [startPauseButton,stopButton] {
-            
-            button.setTranslatesAutoresizingMaskIntoConstraints(true)
-            
+            button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
             if button.tag == ud.integerForKey("audioButtonID") {
-                button.frame = CGRectMake(16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
+                button.setTitle("再生", forState: .Normal)
+                button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
             } else {
-                button.frame = CGRectMake(uiviewWidth - 2*(uiviewWidth/5) - 16, uiviewHeight - uiviewHeight/6 - 70, 2*(uiviewWidth/5), uiviewHeight/6)
+                button.setTitle("停止", forState: .Normal)
+                button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
             }
-        
         }
+    }
+    
+    @IBAction func didTapPlayPauseButton(sender: AnyObject) {
+        let button = sender as! UIButton
+        if speaker.speaker.paused || !speaker.speaker.speaking {
+            speaker.startSpeak()
+            button.setTitle("一時停止", forState: UIControlState.Normal)
+        } else {
+            speaker.pauseSpeak()
+            button.setTitle("再開", forState: UIControlState.Normal)
+        }
+    }
+    
+    func didTapStopButton(sender: AnyObject) {
+        let button = sender as! UIButton
+        for myButton in [startPauseButton,stopButton] {
+            if myButton.tag != button.tag {
+                myButton.setTitle("再生", forState: .Normal)
+            }
+        }
+        speaker.stopSpeak()
     }
     
     @IBAction func didTapModalEditViewButton(sender: AnyObject) {
         speaker.stopSpeak()
         self.performSegueWithIdentifier("modal", sender: self)
-    }
-    
-    
-    @IBAction func didTapPlayPauseButton(sender: AnyObject) {
-        if speaker.speaker.paused || !speaker.speaker.speaking {
-            speaker.startSpeak()
-            startPauseButton.setTitle("一時停止", forState: UIControlState.Normal)
-        } else {
-            speaker.pauseSpeak()
-            startPauseButton.setTitle("再開", forState: UIControlState.Normal)
-        }
-    }
-    
-    @IBAction func didTapStopButton(sender: AnyObject) {
-        speaker.stopSpeak()
-        startPauseButton.setTitle("再生", forState: UIControlState.Normal)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -140,7 +141,12 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
-        startPauseButton.setTitle("再生", forState: UIControlState.Normal)
+        for button in [startPauseButton,stopButton] {
+            if button.tag == ud.integerForKey("audioButtonID") {
+                button.setTitle("再生", forState: .Normal)
+                button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
+            }
+        }
     }
     
 }

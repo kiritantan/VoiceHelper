@@ -10,26 +10,25 @@ import UIKit
 import AVFoundation
 
 extension UITextView {
-    func selectTextAtRange(range:NSRange) {
-        let start = self.positionFromPosition(self.beginningOfDocument, offset: range.location)
-        let end   = self.positionFromPosition(start!, offset: range.length)
-        self.selectedTextRange = self.textRangeFromPosition(start, toPosition: end);
-    }
+//    func selectTextAtRange(range:NSRange) {
+//        let start = self.positionFromPosition(self.beginningOfDocument, offset: range.location)
+//        let end   = self.positionFromPosition(start!, offset: range.length)
+//        self.selectedTextRange = self.textRangeFromPosition(start, toPosition: end);
+//    }
 }
 
 class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesizerDelegate {
 
+    let placeHolderString = "入力欄"
     let ud = NSUserDefaults.standardUserDefaults()
     let speaker = SpeakModel()
     
     @IBOutlet var textView: UITextView!
     @IBOutlet var startPauseButton: FrameBorderButton!
     @IBOutlet var stopButton: FrameBorderButton!
-    @IBOutlet var deleteTextButton: FrameBorderButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "ボイスヘルパー"
         speaker.speaker.delegate = self
         initTextView()
         initUserDefaults()
@@ -39,11 +38,21 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         super.viewWillAppear(animated)
         speaker.registerSpeaker(textView.text)
         DefindLayoutOfAudioButtons()
+        switch ud.integerForKey("languageID") {
+        case 10:
+            self.title = "日本語モード"
+        case 11:
+            self.title = "英語モード"
+        default:
+            break
+        }
     }
 
     func initTextView() {
         textView.delegate = self
         textView.returnKeyType = UIReturnKeyType.Done
+        textView.text = placeHolderString
+        textView.textColor = UIColor.lightGrayColor()
     }
     
     func initUserDefaults(){
@@ -97,12 +106,6 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         }
     }
     
-    @IBAction func didTapDeleteTextButton(sender: AnyObject) {
-        speaker.stopSpeak()
-        textView.text = ""
-        speaker.registerSpeaker(textView.text)
-    }
-    
     func textViewShouldBeginEditing(textView: UITextView) -> Bool {
         let delay = 0.1 * Double(NSEC_PER_SEC)
         let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
@@ -114,12 +117,17 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     func textViewDidBeginEditing(textView: UITextView) {
         speaker.stopSpeak()
-        deleteTextButton.hidden = true;
-        textView.selectTextAtRange(NSRange(location: 1, length: 5))
+        if textView.textColor == UIColor.lightGrayColor() {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
     }
     
     func textViewDidEndEditing(textView: UITextView) {
-        deleteTextButton.hidden = false
+        if textView.text.isEmpty {
+            textView.text = placeHolderString
+            textView.textColor = UIColor.lightGrayColor()
+        }
         speaker.registerSpeaker(textView.text)
     }
     

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ModalViewControllerDelegate{
-    func modalDidFinished(modalText: String)
+    func modalDidFinished(modalText: String,textView: UITextView)
 }
 
 class ModalViewController: UIViewController,UITextViewDelegate {
@@ -51,7 +51,7 @@ class ModalViewController: UIViewController,UITextViewDelegate {
     }
     
     func textViewDidEndEditing(textView: UITextView) {
-        self.delegate.modalDidFinished(self.textView.text)
+        self.delegate.modalDidFinished(self.textView.text,textView: self.textView)
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {

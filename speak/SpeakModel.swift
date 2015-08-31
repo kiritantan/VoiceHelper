@@ -32,21 +32,27 @@ class SpeakModel: NSObject {
     func startSpeak() {
         if speaker.paused {
             speaker.continueSpeaking()
-        } else if !self.speaker.speaking {
+        } else if !speaker.speaking {
             speaker.speakUtterance(utterance)
         }
     }
     
     func pauseSpeak() {
-        speaker.pauseSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        if speaker.speaking {
+            speaker.pauseSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        }
     }
     
     func stopSpeak() {
-        speaker.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        if speaker.speaking {
+            speaker.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
+        }
     }
     
     func speakPhrase() {
-        speaker.speakUtterance(utterance)
+        if !speaker.speaking {
+            speaker.speakUtterance(utterance)
+        }
     }
     
 }

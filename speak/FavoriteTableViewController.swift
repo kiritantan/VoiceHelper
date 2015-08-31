@@ -8,107 +8,131 @@
 
 import UIKit
 import AVFoundation
+import Realm
 
-class FavoriteTableViewController: UITableViewController,AVSpeechSynthesizerDelegate {
+class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,ModalViewControllerDelegate,UITableViewDelegate,UITableViewDataSource {
     
-    
-    let ud = NSUserDefaults.standardUserDefaults()
+    @IBOutlet var tableView: UITableView!
+    let realm = RLMRealm.defaultRealm()
     let speaker = SpeakModel()
-    var textArray:[String]! = nil
+    let modalView = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("modalView") as! ModalViewController
+    var textArray: NSMutableArray = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
+        tableView.allowsSelectionDuringEditing = true
         speaker.speaker.delegate = self
         self.title = "お気に入りのフレーズ"
-//        textArray = ud.objectForKey("favoritePhraseArray") as? [String]
-        textArray = ["おはようございます","こんにちは","こんばんわ","ありがとうございます",""]
+        modalView.delegate = self
+        tableView.rowHeight = 100.0
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count-1, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+        speaker.stopSpeak()
+        textArray = []
+        for realmPhrase in FavoritePhrase.allObjects() {
+            textArray.addObject("\((realmPhrase as! FavoritePhrase).phrase)")
+        }
+        tableView.reloadData()
+        tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewWillDisappear(animated: Bool) {
+        speaker.stopSpeak()
     }
+    
+    @IBAction func didTapAddCellButton(sender: AnyObject) {
+        self.presentViewController(modalView, animated: true, completion: nil)
+    }
+    
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Potentially incomplete method implementation.
-        // Return the number of sections.
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        return textArray.count
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return textArray.count + 1
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
-        cell.textLabel?.text = textArray[indexPath.row]
+        if indexPath.row != textArray.count {
+            cell.textLabel?.text = textArray[indexPath.row] as? String
+        } else {
+            cell.textLabel?.text = ""
+        }
         return cell
     }
     
-    override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
-        speaker.registerSpeaker(textArray[indexPath.row])
+    func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+        if indexPath.row != textArray.count {
+            speaker.registerSpeaker(textArray[indexPath.row] as! String)
+        } else {
+            speaker.registerSpeaker("")
+        }
         return indexPath
     }
     
-    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
         speaker.speakPhrase()
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if indexPath.row != textArray.count {
+            return true
+        }
+        return false
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            realm.beginWriteTransaction()
+            realm.deleteObjects(FavoritePhrase.objectsWhere("phrase = '\(textArray[indexPath.row])'"))
+            realm.commitWriteTransaction()
+            textArray.removeObjectAtIndex(indexPath.row)
+            let delay = 0.1 * Double(NSEC_PER_SEC)
+            let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+            dispatch_after(time, dispatch_get_main_queue(), {
+                tableView.reloadData()
+                tableView.selectRowAtIndexPath(NSIndexPath(forRow: self.textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+            })
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
+    
+    func modalDidFinished(modalText: String, textView: UITextView) {
+        var flag = true;
+        let results = FavoritePhrase.objectsWhere("phrase = '\(modalText)'")
+        for realmBook in results {
+            flag = false
+        }
+        if flag {
+            let phrase = FavoritePhrase()
+            if modalText != "" {
+                phrase.phrase = modalText
+                realm.transactionWithBlock() {
+                    self.realm.addObject(phrase)
+                }
+                textArray.addObject(modalText)
+                tableView.reloadData()
+                tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+                tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: textArray.count-1, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+            }
+            self.modalView.dismissViewControllerAnimated(true, completion: nil)
+        } else {
+            AlertBuilder(title: "このフレーズは登録済みです", message: "編集を続けますか?", preferredStyle: .Alert)
+                .addAction(title: "いいえ", style: .Cancel) { Void in
+                    self.modalView.dismissViewControllerAnimated(true, completion: nil)
+                }
+                .addAction(title: "はい", style: .Default) { Void in
+                    textView.becomeFirstResponder()
+                }
+                .build()
+                .kam_show(animated: true)
+        }
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

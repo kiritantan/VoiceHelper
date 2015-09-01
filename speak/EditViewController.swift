@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class EditViewController: UIViewController,SSRadioButtonsDelegate {
     
     let ud = NSUserDefaults.standardUserDefaults()
     
+    @IBOutlet var mpVolumeParentView: UIView!
     @IBOutlet var japaneseButton: UIButton!
     @IBOutlet var englishButton: UIButton!
     @IBOutlet var placeLeftPlayButton: UIButton!
@@ -54,6 +56,8 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
             selectRateSlider.hidden = false
             selectPitchSlider.hidden = false
         }
+        let myVolumeView = MPVolumeView(frame: mpVolumeParentView.bounds)
+        mpVolumeParentView.addSubview(myVolumeView)
     }
     
     override func viewDidAppear(animated: Bool) {

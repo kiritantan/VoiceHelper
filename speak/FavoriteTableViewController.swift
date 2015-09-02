@@ -25,6 +25,8 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         self.title = "お気に入りのフレーズ"
         modalView.delegate = self
         tableView.rowHeight = 100.0
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "didLongTap:")
+        tableView.addGestureRecognizer(longPressGestureRecognizer)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -37,7 +39,25 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
     }
     
+    func didLongTap(gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
+            return
+        }
+        let p = gestureRecognizer.locationInView(tableView)
+        let indexPath = tableView.indexPathForRowAtPoint(p)
+        let cell = tableView.cellForRowAtIndexPath(indexPath!)
+        if indexPath?.row < textArray.count {
+            realm.beginWriteTransaction()
+            realm.deleteObjects(FavoritePhrase.objectsWhere("phrase = '\(textArray[indexPath!.row])'"))
+            realm.commitWriteTransaction()
+            modalView.phrase = textArray[indexPath!.row] as! String
+            textArray.removeObjectAtIndex(indexPath!.row)
+            self.presentViewController(modalView, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func didTapAddCellButton(sender: AnyObject) {
+        modalView.phrase = ""
         self.presentViewController(modalView, animated: true, completion: nil)
     }
     

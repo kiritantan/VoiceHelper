@@ -14,6 +14,7 @@ protocol ModalViewControllerDelegate{
 
 class ModalViewController: UIViewController,UITextViewDelegate {
 
+    var phrase: String = ""
     var delegate: ModalViewControllerDelegate! = nil
     let textView = UITextView()
 
@@ -24,7 +25,7 @@ class ModalViewController: UIViewController,UITextViewDelegate {
     }
     
     override func viewWillAppear(animated: Bool) {
-        textView.text = ""
+        textView.text = phrase
         textView.becomeFirstResponder()
     }
     

@@ -8,20 +8,14 @@
 
 import UIKit
 import AVFoundation
-
-extension UITextView {
-//    func selectTextAtRange(range:NSRange) {
-//        let start = self.positionFromPosition(self.beginningOfDocument, offset: range.location)
-//        let end   = self.positionFromPosition(start!, offset: range.length)
-//        self.selectedTextRange = self.textRangeFromPosition(start, toPosition: end);
-//    }
-}
+import Realm
 
 class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesizerDelegate {
 
     let placeHolderString = "入力欄"
     let ud = NSUserDefaults.standardUserDefaults()
     let speaker = SpeakModel()
+    let realm = RLMRealm.defaultRealm()
     
     @IBOutlet var textView: UITextView!
     @IBOutlet var startPauseButton: FrameBorderButton!
@@ -83,6 +77,42 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             button.setTitle("再開", forState: UIControlState.Normal)
         }
     }
+    
+    @IBAction func didTapRegisterPhraseButton(sender: UIButton) {
+        var flag = true;
+        let results = FavoritePhrase.objectsWhere("phrase = '\(textView.text)'")
+        for realmBook in results {
+            flag = false
+        }
+        if flag {
+            if textView.textColor == UIColor.lightGrayColor() {
+                return
+            }
+            let phrase = FavoritePhrase()
+            if textView.text != "" {
+                phrase.phrase = textView.text
+                realm.transactionWithBlock() {
+                    self.realm.addObject(phrase)
+                }
+                AlertBuilder(title: "お気に入りに登録しました", message: "", preferredStyle: .Alert)
+                    .addAction(title: "OK", style: .Cancel) { Void in
+                        
+                    }
+                    .build()
+                    .kam_show(animated: true)
+            }
+        } else {
+            if textView.textColor == UIColor.lightGrayColor() {
+                AlertBuilder(title: "このフレーズは登録済みです", message: "", preferredStyle: .Alert)
+                    .addAction(title: "OK", style: .Cancel) { Void in
+                        
+                    }
+                    .build()
+                    .kam_show(animated: true)
+            }
+        }
+    }
+    
     
     func didTapStopButton(sender: AnyObject) {
         let button = sender as! UIButton

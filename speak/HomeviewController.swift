@@ -102,7 +102,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
                     .kam_show(animated: true)
             }
         } else {
-            if textView.textColor == UIColor.lightGrayColor() {
+            if textView.textColor != UIColor.lightGrayColor() {
                 AlertBuilder(title: "このフレーズは登録済みです", message: "", preferredStyle: .Alert)
                     .addAction(title: "OK", style: .Cancel) { Void in
                         

@@ -268,20 +268,20 @@
                                 <exclude reference="LhV-OY-Ezb"/>
                                 <exclude reference="WME-bm-zY8"/>
                                 <exclude reference="ZTk-5g-rz0"/>
-                                <exclude reference="aLT-yi-hQk"/>
-                                <exclude reference="MzQ-3M-pHz"/>
-                                <exclude reference="R0j-by-yGP"/>
-                                <exclude reference="dNp-3o-9Dl"/>
-                                <exclude reference="rYw-on-bfp"/>
-                                <exclude reference="2Qh-f9-52p"/>
-                                <exclude reference="6kD-sM-WcU"/>
-                                <exclude reference="hBL-li-zaC"/>
-                                <exclude reference="t3g-do-iEc"/>
                                 <exclude reference="7Rb-Jo-3xP"/>
                                 <exclude reference="Rc3-Ca-LjN"/>
                                 <exclude reference="frt-Yc-3r4"/>
                                 <exclude reference="knL-zj-j1b"/>
                                 <exclude reference="lnH-dw-I4g"/>
+                                <exclude reference="MzQ-3M-pHz"/>
+                                <exclude reference="R0j-by-yGP"/>
+                                <exclude reference="dNp-3o-9Dl"/>
+                                <exclude reference="rYw-on-bfp"/>
+                                <exclude reference="aLT-yi-hQk"/>
+                                <exclude reference="2Qh-f9-52p"/>
+                                <exclude reference="6kD-sM-WcU"/>
+                                <exclude reference="hBL-li-zaC"/>
+                                <exclude reference="t3g-do-iEc"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -296,13 +296,13 @@
                                 <include reference="IhD-Qg-UK5"/>
                                 <include reference="z4A-uf-mGc"/>
                                 <include reference="ZTk-5g-rz0"/>
+                                <include reference="frt-Yc-3r4"/>
                                 <include reference="MzQ-3M-pHz"/>
                                 <include reference="R0j-by-yGP"/>
                                 <include reference="dNp-3o-9Dl"/>
                                 <include reference="rYw-on-bfp"/>
                                 <include reference="2Qh-f9-52p"/>
                                 <include reference="6kD-sM-WcU"/>
-                                <include reference="frt-Yc-3r4"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
@@ -320,13 +320,13 @@
                                 <exclude reference="ICx-Ia-JwE"/>
                                 <include reference="LhV-OY-Ezb"/>
                                 <include reference="WME-bm-zY8"/>
-                                <include reference="aLT-yi-hQk"/>
-                                <exclude reference="hBL-li-zaC"/>
-                                <include reference="t3g-do-iEc"/>
                                 <include reference="7Rb-Jo-3xP"/>
                                 <include reference="Rc3-Ca-LjN"/>
                                 <include reference="knL-zj-j1b"/>
                                 <include reference="lnH-dw-I4g"/>
+                                <include reference="aLT-yi-hQk"/>
+                                <exclude reference="hBL-li-zaC"/>
+                                <include reference="t3g-do-iEc"/>
                             </mask>
                         </variation>
                     </view>

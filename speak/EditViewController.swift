@@ -46,8 +46,8 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
         saveParams()
+        super.viewWillDisappear(animated)
     }
     
     func onOrientationChange(notification: NSNotification){

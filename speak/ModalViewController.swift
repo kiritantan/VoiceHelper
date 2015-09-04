@@ -29,8 +29,18 @@ class ModalViewController: UIViewController,UITextViewDelegate {
         textView.becomeFirstResponder()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onOrientationChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+    }
+    
+    func onOrientationChange(notification: NSNotification){
+        UIView.animateWithDuration(0.40, animations:{() -> Void in
+            self.textView.frame = CGRectMake(10, (self.view.frame.size.height)/12, self.view.frame.size.width-20, (self.view.frame.size.height*3)/10)
+            })
+    }
+    
     func initTextView() {
-        textView.frame = CGRectMake(10, (self.view.frame.size.height)/10, self.view.frame.size.width-20, (self.view.frame.size.height*2)/5)
+        textView.frame = CGRectMake(10, (self.view.frame.size.height)/12, self.view.frame.size.width-20, (self.view.frame.size.height*3)/10)
         textView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
         textView.layer.borderWidth  = 2
         textView.layer.cornerRadius = 10

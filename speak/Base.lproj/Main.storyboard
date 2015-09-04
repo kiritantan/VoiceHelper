@@ -67,7 +67,9 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="6UT-bQ-0eE"/>
-                                    <constraint firstAttribute="height" constant="300" id="jgk-3P-lJL"/>
+                                    <constraint firstAttribute="height" constant="300" id="jgk-3P-lJL">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="270"/>
+                                    </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -251,7 +253,9 @@
                             <constraint firstItem="166-fh-Zym" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="ZTk-5g-rz0"/>
                             <constraint firstItem="zka-tM-50m" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="a16-pn-Xdk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="166-fh-Zym" secondAttribute="trailing" constant="20" id="aLT-yi-hQk"/>
-                            <constraint firstItem="zka-tM-50m" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="26" id="cbd-Ue-q6J"/>
+                            <constraint firstItem="zka-tM-50m" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="26" id="cbd-Ue-q6J">
+                                <variation key="heightClass=regular-widthClass=regular" constant="20"/>
+                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="Gbv-es-aHa" secondAttribute="centerX" id="e4y-Hq-tAv"/>
                             <constraint firstAttribute="centerX" secondItem="VUD-xK-JT0" secondAttribute="centerX" id="hBL-li-zaC"/>
                             <constraint firstItem="Gbv-es-aHa" firstAttribute="top" secondItem="zka-tM-50m" secondAttribute="bottom" constant="8" id="kLS-vG-Y8G"/>

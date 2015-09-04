@@ -50,7 +50,6 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
         saveParams()
     }
     
-    // 端末の向きがかわったら呼び出される.
     func onOrientationChange(notification: NSNotification){
         myVolumeView.frame = mpVolumeViewParentView.bounds
     }

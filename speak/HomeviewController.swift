@@ -169,10 +169,23 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text != "\n" {
-            return true
+        let maxLength: Int = 500
+        var str = textView.text + text
+        if count("\(str)") < maxLength {
+            if text != "\n" {
+                return true
+            }
         }
-        textView.resignFirstResponder()
+        if text == "\n" {
+            textView.resignFirstResponder()
+        } else {
+            AlertBuilder(title: "文字数の上限を超えました", message: "", preferredStyle: .Alert)
+                .addAction(title: "OK", style: .Cancel) { Void in
+                    
+                }
+                .build()
+                .kam_show(animated: true)
+        }
         return false
     }
     

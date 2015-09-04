@@ -34,6 +34,7 @@ class ModalViewController: UIViewController,UITextViewDelegate {
         textView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
         textView.layer.borderWidth  = 2
         textView.layer.cornerRadius = 10
+        textView.font = UIFont.systemFontOfSize(30)
         textView.delegate = self
         textView.returnKeyType = UIReturnKeyType.Done
         self.view.addSubview(self.textView)
@@ -51,15 +52,25 @@ class ModalViewController: UIViewController,UITextViewDelegate {
         textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.endOfDocument)
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
-        self.delegate.modalDidFinished(self.textView.text,textView: self.textView)
-    }
-    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text != "\n" {
-            return true
+        let maxLength: Int = 500
+        var str = textView.text + text
+        if count("\(str)") < maxLength {
+            if text != "\n" {
+                return true
+            }
         }
-        textView.resignFirstResponder()
+        if text == "\n" {
+            textView.resignFirstResponder()
+            self.delegate.modalDidFinished(self.textView.text,textView: self.textView)
+        } else {
+            AlertBuilder(title: "文字数の上限を超えました", message: "", preferredStyle: .Alert)
+                .addAction(title: "OK", style: .Cancel) { Void in
+                    
+                }
+                .build()
+                .kam_show(animated: true)
+        }
         return false
     }
     

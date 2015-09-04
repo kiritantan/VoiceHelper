@@ -23,6 +23,7 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "設定"
         placeButtonArray    = [placeLeftPlayButton,placeRightPlayButton]
         placeRadioButtonController.setButtonsArray(placeButtonArray)
         placeRadioButtonController.delegate   = self

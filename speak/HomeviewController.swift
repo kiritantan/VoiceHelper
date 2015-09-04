@@ -23,7 +23,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "speak"
+        self.title = "会話"
         speaker.speaker.delegate = self
         initTextView()
         initUserDefaults()

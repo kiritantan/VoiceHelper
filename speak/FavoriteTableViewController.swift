@@ -22,7 +22,7 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         super.viewDidLoad()
         tableView.allowsSelectionDuringEditing = true
         speaker.speaker.delegate = self
-        self.title = "お気に入りのフレーズ"
+        self.title = "お気に入り"
         modalView.delegate = self
         tableView.rowHeight = 100.0
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "didLongTap:")

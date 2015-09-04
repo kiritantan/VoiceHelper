@@ -38,6 +38,11 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         updateSpeakerState()
         DefindLayoutOfAudioButtons()
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        speaker.stopSpeak()
+    }
 
     func initTextView() {
         textView.delegate = self

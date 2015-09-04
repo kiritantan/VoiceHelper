@@ -17,6 +17,7 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     let speaker = SpeakModel()
     let modalView = ModalViewController()
     var textArray: NSMutableArray = []
+    var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +39,11 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         }
         tableView.reloadData()
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        speaker.stopSpeak()
     }
     
     func didLongTap(gestureRecognizer: UILongPressGestureRecognizer) {
@@ -99,6 +105,7 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         } else {
             speaker.registerSpeaker("")
         }
+        selectedIndexPath = indexPath
         return indexPath
     }
     
@@ -127,6 +134,11 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
             })
             
         }
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
+        tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count + 1, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
     }
     
     func modalDidFinished(modalText: String, textView: UITextView) {

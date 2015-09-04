@@ -35,8 +35,13 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        updateSpeakerState()
-        DefindLayoutOfAudioButtons()
+        let delay = 0.1 * Double(NSEC_PER_SEC)
+        let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(time, dispatch_get_main_queue(), {
+            self.updateSpeakerState()
+            self.DefindLayoutOfAudioButtons()
+        })
+        
     }
     
     override func viewWillDisappear(animated: Bool) {

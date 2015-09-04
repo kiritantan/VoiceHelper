@@ -16,6 +16,8 @@
 	<string>ボイスヘルパー</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>CFBundleDisplayName</key>
+	<string>会話補助</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleSignature</key>

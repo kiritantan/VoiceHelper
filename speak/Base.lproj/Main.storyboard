@@ -1173,7 +1173,9 @@
                             <constraint firstItem="kNV-eD-twn" firstAttribute="leading" secondItem="nH0-c3-6UH" secondAttribute="leadingMargin" constant="-16" id="LfI-P4-6hC">
                                 <variation key="heightClass=regular-widthClass=regular" constant="-17"/>
                             </constraint>
-                            <constraint firstItem="rgi-k2-40p" firstAttribute="top" secondItem="KC3-RW-mgu" secondAttribute="bottom" constant="20" id="OvF-Sx-25R"/>
+                            <constraint firstItem="rgi-k2-40p" firstAttribute="top" secondItem="KC3-RW-mgu" secondAttribute="bottom" constant="20" id="OvF-Sx-25R">
+                                <variation key="heightClass=regular-widthClass=regular" constant="14"/>
+                            </constraint>
                             <constraint firstItem="KC3-RW-mgu" firstAttribute="leading" secondItem="nH0-c3-6UH" secondAttribute="leadingMargin" constant="-16" id="TJh-A7-IQt">
                                 <variation key="widthClass=compact" constant="0.0"/>
                             </constraint>
@@ -1191,7 +1193,9 @@
                                 <variation key="heightClass=regular-widthClass=regular" constant="-25"/>
                             </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="KC3-RW-mgu" secondAttribute="trailing" constant="184" id="ehN-ds-TeM"/>
-                            <constraint firstItem="KC3-RW-mgu" firstAttribute="top" secondItem="kNV-eD-twn" secondAttribute="bottom" constant="8" id="hFR-IV-KQy"/>
+                            <constraint firstItem="KC3-RW-mgu" firstAttribute="top" secondItem="kNV-eD-twn" secondAttribute="bottom" constant="8" id="hFR-IV-KQy">
+                                <variation key="heightClass=regular-widthClass=regular" constant="14"/>
+                            </constraint>
                             <constraint firstItem="kNV-eD-twn" firstAttribute="leading" secondItem="nH0-c3-6UH" secondAttribute="leadingMargin" constant="-16" id="oaj-VF-3J3">
                                 <variation key="widthClass=compact" constant="-17"/>
                             </constraint>

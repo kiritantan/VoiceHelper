@@ -25,8 +25,12 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         super.viewDidLoad()
         self.title = "会話"
         speaker.speaker.delegate = self
+        textView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
         initTextView()
         initUserDefaults()
+        var audioSession = AVAudioSession.sharedInstance()
+        audioSession.setCategory(AVAudioSessionCategoryPlayback, error: nil)
+        audioSession.setActive(true, error:nil)
     }
 
     override func viewWillAppear(animated: Bool) {

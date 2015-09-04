@@ -51,7 +51,9 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
     }
     
     func onOrientationChange(notification: NSNotification){
-        myVolumeView.frame = mpVolumeViewParentView.bounds
+        UIView.animateWithDuration(0.40, animations:{() -> Void in
+            self.myVolumeView.frame = self.mpVolumeViewParentView.bounds
+        })
     }
     
     func isSelectedButton(button:UIButton) -> Bool {

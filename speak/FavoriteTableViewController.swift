@@ -27,6 +27,7 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         tableView.rowHeight = 100.0
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "didLongTap:")
         tableView.addGestureRecognizer(longPressGestureRecognizer)
+        tableView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
     }
     
     override func viewWillAppear(animated: Bool) {

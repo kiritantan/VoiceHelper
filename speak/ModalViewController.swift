@@ -14,30 +14,40 @@ protocol ModalViewControllerDelegate{
 
 class ModalViewController: UIViewController,UITextViewDelegate {
 
+    var phrase: String = ""
     var delegate: ModalViewControllerDelegate! = nil
-    
-    @IBOutlet var textView: UITextView!
-//    let textView = UITextView()
+    let textView = UITextView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.whiteColor()
+        initTextView()
     }
     
     override func viewWillAppear(animated: Bool) {
-        initTextView()
-        textView.text = ""
+        textView.text = phrase
         textView.becomeFirstResponder()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onOrientationChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+    }
+    
+    func onOrientationChange(notification: NSNotification){
+        UIView.animateWithDuration(0.40, animations:{() -> Void in
+            self.textView.frame = CGRectMake(10, (self.view.frame.size.height)/12, self.view.frame.size.width-20, (self.view.frame.size.height*3)/10)
+            })
+    }
+    
     func initTextView() {
-//        textView.frame = CGRectMake(10, (self.view.frame.size.height)/10, self.view.frame.size.width-20, (self.view.frame.size.height*2)/5)
+        textView.frame = CGRectMake(10, (self.view.frame.size.height)/12, self.view.frame.size.width-20, (self.view.frame.size.height*3)/10)
         textView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
         textView.layer.borderWidth  = 2
         textView.layer.cornerRadius = 10
+        textView.font = UIFont.systemFontOfSize(30)
         textView.delegate = self
         textView.returnKeyType = UIReturnKeyType.Done
-//        self.view.addSubview(self.textView)
+        self.view.addSubview(self.textView)
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -52,15 +62,25 @@ class ModalViewController: UIViewController,UITextViewDelegate {
         textView.selectedTextRange = textView.textRangeFromPosition(textView.beginningOfDocument, toPosition: textView.endOfDocument)
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
-        self.delegate.modalDidFinished(self.textView.text,textView: self.textView)
-    }
-    
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text != "\n" {
-            return true
+        let maxLength: Int = 500
+        var str = textView.text + text
+        if count("\(str)") < maxLength {
+            if text != "\n" {
+                return true
+            }
         }
-        textView.resignFirstResponder()
+        if text == "\n" {
+            textView.resignFirstResponder()
+            self.delegate.modalDidFinished(self.textView.text,textView: self.textView)
+        } else {
+            AlertBuilder(title: "文字数の上限を超えました", message: "", preferredStyle: .Alert)
+                .addAction(title: "OK", style: .Cancel) { Void in
+                    
+                }
+                .build()
+                .kam_show(animated: true)
+        }
         return false
     }
     

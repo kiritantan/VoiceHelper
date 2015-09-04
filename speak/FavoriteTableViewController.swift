@@ -15,21 +15,24 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     @IBOutlet var tableView: UITableView!
     let realm = RLMRealm.defaultRealm()
     let speaker = SpeakModel()
-    let modalView = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateViewControllerWithIdentifier("modalView") as! ModalViewController
+    let modalView = ModalViewController()
     var textArray: NSMutableArray = []
+    var selectedIndexPath = NSIndexPath(forRow: 0, inSection: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.allowsSelectionDuringEditing = true
         speaker.speaker.delegate = self
-        self.title = "お気に入りのフレーズ"
+        self.title = "お気に入り"
         modalView.delegate = self
         tableView.rowHeight = 100.0
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: "didLongTap:")
+        tableView.addGestureRecognizer(longPressGestureRecognizer)
+        tableView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        speaker.stopSpeak()
         textArray = []
         for realmPhrase in FavoritePhrase.allObjects() {
             textArray.addObject("\((realmPhrase as! FavoritePhrase).phrase)")
@@ -39,10 +42,29 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     }
     
     override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         speaker.stopSpeak()
     }
     
+    func didLongTap(gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
+            return
+        }
+        let p = gestureRecognizer.locationInView(tableView)
+        let indexPath = tableView.indexPathForRowAtPoint(p)
+        let cell = tableView.cellForRowAtIndexPath(indexPath!)
+        if indexPath?.row < textArray.count {
+            realm.beginWriteTransaction()
+            realm.deleteObjects(FavoritePhrase.objectsWhere("phrase = '\(textArray[indexPath!.row])'"))
+            realm.commitWriteTransaction()
+            modalView.phrase = textArray[indexPath!.row] as! String
+            textArray.removeObjectAtIndex(indexPath!.row)
+            self.presentViewController(modalView, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func didTapAddCellButton(sender: AnyObject) {
+        modalView.phrase = ""
         self.presentViewController(modalView, animated: true, completion: nil)
     }
     
@@ -70,10 +92,20 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         if indexPath.row != textArray.count {
+            let ud = NSUserDefaults.standardUserDefaults()
+            let pattern = "([a-zA-Z0-9+-.,!@#$%^&*()\\[\\];\\/|<>\"'?\\\\= \\n]+)"
+            let replaceString = (textArray[indexPath.row] as! String).stringByReplacingOccurrencesOfString(pattern, withString: "", options: NSStringCompareOptions.RegularExpressionSearch, range: nil)
+            var languageID = 10
+            if replaceString.isEmpty {
+                languageID = 11
+            }
+            ud.setInteger(languageID, forKey: "languageID")
+            ud.synchronize()
             speaker.registerSpeaker(textArray[indexPath.row] as! String)
         } else {
             speaker.registerSpeaker("")
         }
+        selectedIndexPath = indexPath
         return indexPath
     }
     
@@ -100,7 +132,13 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
                 tableView.reloadData()
                 tableView.selectRowAtIndexPath(NSIndexPath(forRow: self.textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
             })
+            
         }
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
+        tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
+        tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count + 1, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
     }
     
     func modalDidFinished(modalText: String, textView: UITextView) {

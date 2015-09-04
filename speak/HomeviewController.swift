@@ -8,12 +8,14 @@
 
 import UIKit
 import AVFoundation
+import Realm
 
 class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesizerDelegate {
 
     let placeHolderString = "入力欄"
     let ud = NSUserDefaults.standardUserDefaults()
     let speaker = SpeakModel()
+    let realm = RLMRealm.defaultRealm()
     
     @IBOutlet var textView: UITextView!
     @IBOutlet var startPauseButton: FrameBorderButton!
@@ -21,27 +23,24 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "会話"
         speaker.speaker.delegate = self
+        textView.layer.borderColor  = UIColor(red: 19/255.0, green: 144/255.0, blue: 255/255.0, alpha: 1.0).CGColor
         initTextView()
         initUserDefaults()
+        var audioSession = AVAudioSession.sharedInstance()
+        audioSession.setCategory(AVAudioSessionCategoryPlayback, error: nil)
+        audioSession.setActive(true, error:nil)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        speaker.registerSpeaker(textView.text)
+        updateSpeakerState()
         DefindLayoutOfAudioButtons()
-        switch ud.integerForKey("languageID") {
-        case 10:
-            self.title = "日本語モード"
-        case 11:
-            self.title = "英語モード"
-        default:
-            break
-        }
-        println(UIDevice.currentDevice().model)
     }
     
     override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         speaker.stopSpeak()
     }
 
@@ -53,35 +52,34 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     }
     
     func initUserDefaults(){
-        ud.registerDefaults(["languageID":10,"audioButtonID":21,"rate":0.25,"pitch":1.0,"favoritePhraseArray":[]])
+        ud.registerDefaults(["languageID":10,"audioButtonID":20,"rate":0.25,"pitch":1.0,"favoritePhraseArray":[]])
+        updateSpeakerState()
+    }
+    
+    func updateSpeakerState() {
+        let ud = NSUserDefaults.standardUserDefaults()
+        let pattern = "([a-zA-Z0-9+-.,!@#$%^&*()\\[\\];\\/|<>\"'?\\\\= \\n]+)"
+        let replaceString = textView.text.stringByReplacingOccurrencesOfString(pattern, withString: "", options: NSStringCompareOptions.RegularExpressionSearch, range: nil)
+        var languageID = 10
+        if replaceString.isEmpty {
+            languageID = 11
+        }
+        ud.setInteger(languageID, forKey: "languageID")
+        ud.synchronize()
         speaker.registerSpeaker(textView.text)
     }
     
     func DefindLayoutOfAudioButtons() {
-        if UIDevice.currentDevice().model == "iPad" {
-            for button in [startPauseButton,stopButton] {
-                button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-                if button.tag == ud.integerForKey("audioButtonID") {
-                    button.setTitle("再生", forState: .Normal)
-                    button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
-                } else {
-                    button.setTitle("停止", forState: .Normal)
-                    button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
-                }
-            }
-        } else {
-            for button in [startPauseButton,stopButton] {
-                button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
-                if button.tag != ud.integerForKey("audioButtonID") {
-                    button.setTitle("再生", forState: .Normal)
-                    button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
-                } else {
-                    button.setTitle("停止", forState: .Normal)
-                    button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
-                }
+        for button in [startPauseButton,stopButton] {
+            button.removeTarget(nil, action: nil, forControlEvents: .AllEvents)
+            if button.tag == ud.integerForKey("audioButtonID") {
+                button.setTitle("再生", forState: .Normal)
+                button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
+            } else {
+                button.setTitle("停止", forState: .Normal)
+                button.addTarget(self, action: "didTapStopButton:", forControlEvents: .TouchUpInside)
             }
         }
-        
     }
     
     @IBAction func didTapPlayPauseButton(sender: AnyObject) {
@@ -94,6 +92,42 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             button.setTitle("再開", forState: UIControlState.Normal)
         }
     }
+    
+    @IBAction func didTapRegisterPhraseButton(sender: UIButton) {
+        var flag = true;
+        let results = FavoritePhrase.objectsWhere("phrase = '\(textView.text)'")
+        for realmBook in results {
+            flag = false
+        }
+        if flag {
+            if textView.textColor == UIColor.lightGrayColor() {
+                return
+            }
+            let phrase = FavoritePhrase()
+            if textView.text != "" {
+                phrase.phrase = textView.text
+                realm.transactionWithBlock() {
+                    self.realm.addObject(phrase)
+                }
+                AlertBuilder(title: "お気に入りに登録しました", message: "", preferredStyle: .Alert)
+                    .addAction(title: "OK", style: .Cancel) { Void in
+                        
+                    }
+                    .build()
+                    .kam_show(animated: true)
+            }
+        } else {
+            if textView.textColor != UIColor.lightGrayColor() {
+                AlertBuilder(title: "このフレーズは登録済みです", message: "", preferredStyle: .Alert)
+                    .addAction(title: "OK", style: .Cancel) { Void in
+                        
+                    }
+                    .build()
+                    .kam_show(animated: true)
+            }
+        }
+    }
+    
     
     func didTapStopButton(sender: AnyObject) {
         let button = sender as! UIButton
@@ -114,8 +148,6 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
         if let touch = touches.first as? UITouch {
             if touch.view.tag == 1 {
                 textView.resignFirstResponder()
-                startPauseButton.hidden = false
-                stopButton.hidden = false
             }
         }
     }
@@ -135,8 +167,6 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             textView.text = nil
             textView.textColor = UIColor.blackColor()
         }
-        startPauseButton.hidden = true
-        stopButton.hidden = true
     }
     
     func textViewDidEndEditing(textView: UITextView) {
@@ -144,31 +174,35 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             textView.text = placeHolderString
             textView.textColor = UIColor.lightGrayColor()
         }
-        speaker.registerSpeaker(textView.text)
-        startPauseButton.hidden = false
-        stopButton.hidden = false
+        updateSpeakerState()
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text != "\n" {
-            return true
+        let maxLength: Int = 500
+        var str = textView.text + text
+        if count("\(str)") < maxLength {
+            if text != "\n" {
+                return true
+            }
         }
-        textView.resignFirstResponder()
+        if text == "\n" {
+            textView.resignFirstResponder()
+        } else {
+            AlertBuilder(title: "文字数の上限を超えました", message: "", preferredStyle: .Alert)
+                .addAction(title: "OK", style: .Cancel) { Void in
+                    
+                }
+                .build()
+                .kam_show(animated: true)
+        }
         return false
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
-        if UIDevice.currentDevice().model == "iPad" {
-            for button in [startPauseButton,stopButton] {
-                if button.tag == ud.integerForKey("audioButtonID") {
-                    button.setTitle("再生", forState: .Normal)
-                }
-            }
-        } else {
-            for button in [startPauseButton,stopButton] {
-                if button.tag != ud.integerForKey("audioButtonID") {
-                    button.setTitle("再生", forState: .Normal)
-                }
+        for button in [startPauseButton,stopButton] {
+            if button.tag == ud.integerForKey("audioButtonID") {
+                button.setTitle("再生", forState: .Normal)
+                button.addTarget(self, action: "didTapPlayPauseButton:", forControlEvents: .TouchUpInside)
             }
         }
     }

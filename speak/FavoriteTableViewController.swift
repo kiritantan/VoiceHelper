@@ -85,6 +85,15 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     
     func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
         if indexPath.row != textArray.count {
+            let ud = NSUserDefaults.standardUserDefaults()
+            let pattern = "([a-zA-Z0-9+-.,!@#$%^&*()\\[\\];\\/|<>\"'?\\\\= \\n]+)"
+            let replaceString = (textArray[indexPath.row] as! String).stringByReplacingOccurrencesOfString(pattern, withString: "", options: NSStringCompareOptions.RegularExpressionSearch, range: nil)
+            var languageID = 10
+            if replaceString.isEmpty {
+                languageID = 11
+            }
+            ud.setInteger(languageID, forKey: "languageID")
+            ud.synchronize()
             speaker.registerSpeaker(textArray[indexPath.row] as! String)
         } else {
             speaker.registerSpeaker("")

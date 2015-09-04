@@ -23,6 +23,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "speak"
         speaker.speaker.delegate = self
         initTextView()
         initUserDefaults()
@@ -30,16 +31,8 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        speaker.registerSpeaker(textView.text)
+        updateSpeakerState()
         DefindLayoutOfAudioButtons()
-        switch ud.integerForKey("languageID") {
-        case 10:
-            self.title = "日本語モード"
-        case 11:
-            self.title = "英語モード"
-        default:
-            break
-        }
     }
 
     func initTextView() {
@@ -51,6 +44,19 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
     
     func initUserDefaults(){
         ud.registerDefaults(["languageID":10,"audioButtonID":20,"rate":0.25,"pitch":1.0,"favoritePhraseArray":[]])
+        updateSpeakerState()
+    }
+    
+    func updateSpeakerState() {
+        let ud = NSUserDefaults.standardUserDefaults()
+        let pattern = "([a-zA-Z0-9+-.,!@#$%^&*()\\[\\];\\/|<>\"'?\\\\= \\n]+)"
+        let replaceString = textView.text.stringByReplacingOccurrencesOfString(pattern, withString: "", options: NSStringCompareOptions.RegularExpressionSearch, range: nil)
+        var languageID = 10
+        if replaceString.isEmpty {
+            languageID = 11
+        }
+        ud.setInteger(languageID, forKey: "languageID")
+        ud.synchronize()
         speaker.registerSpeaker(textView.text)
     }
     
@@ -159,7 +165,7 @@ class HomeviewController: UIViewController,UITextViewDelegate,AVSpeechSynthesize
             textView.text = placeHolderString
             textView.textColor = UIColor.lightGrayColor()
         }
-        speaker.registerSpeaker(textView.text)
+        updateSpeakerState()
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {

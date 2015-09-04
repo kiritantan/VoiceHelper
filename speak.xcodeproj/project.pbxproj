@@ -16,6 +16,7 @@
 		4B4265031AFCFDA4007FA2AA /* speakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4265021AFCFDA4007FA2AA /* speakTests.swift */; };
 		4B42650D1AFD17D1007FA2AA /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650C1AFD17D1007FA2AA /* EditViewController.swift */; };
 		4B42650F1AFD2608007FA2AA /* SpeakModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B42650E1AFD2608007FA2AA /* SpeakModel.swift */; };
+		4B909B461B99FF7F004B1FE9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B909B451B99FF7F004B1FE9 /* MediaPlayer.framework */; };
 		4BBE408D1B0DF96F00D8A14C /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */; };
 		4BBE408F1B0E049E00D8A14C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4BBE408E1B0E049E00D8A14C /* Settings.bundle */; };
 		4BC3C74C1B614A6F00417107 /* FavoritePhrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BC3C74B1B614A6F00417107 /* FavoritePhrase.swift */; };
@@ -52,6 +53,7 @@
 		4B4265021AFCFDA4007FA2AA /* speakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = speakTests.swift; sourceTree = "<group>"; };
 		4B42650C1AFD17D1007FA2AA /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		4B42650E1AFD2608007FA2AA /* SpeakModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakModel.swift; sourceTree = "<group>"; };
+		4B909B451B99FF7F004B1FE9 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4BBE408C1B0DF96F00D8A14C /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
 		4BBE408E1B0E049E00D8A14C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		4BC3C74B1B614A6F00417107 /* FavoritePhrase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritePhrase.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B909B461B99FF7F004B1FE9 /* MediaPlayer.framework in Frameworks */,
 				883F15E3AF5FDD5110F5EC03 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +89,7 @@
 		38FA4E595CC8B944894D9037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4B909B451B99FF7F004B1FE9 /* MediaPlayer.framework */,
 				68E11A1C9DA4722BB7F7D539 /* Pods.framework */,
 			);
 			name = Frameworks;

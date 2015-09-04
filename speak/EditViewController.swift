@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class EditViewController: UIViewController,SSRadioButtonsDelegate {
     
@@ -16,10 +17,12 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
     @IBOutlet var placeRightPlayButton: UIButton!
     @IBOutlet var selectRateSlider: UISlider!
     @IBOutlet var selectPitchSlider: UISlider!
+    @IBOutlet var mpVolumeViewParentView: UIView!
     
     var langageRadioButtonController = SSRadioButtonsController()
     var placeRadioButtonController = SSRadioButtonsController()
     var placeButtonArray:[UIButton]!    = nil
+    let myVolumeView = MPVolumeView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,11 +37,22 @@ class EditViewController: UIViewController,SSRadioButtonsDelegate {
         }
         selectRateSlider.value = ud.floatForKey("rate")
         selectPitchSlider.value = ud.floatForKey("pitch")
+        mpVolumeViewParentView.addSubview(myVolumeView)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onOrientationChange:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        myVolumeView.frame = mpVolumeViewParentView.bounds
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         saveParams()
+    }
+    
+    // 端末の向きがかわったら呼び出される.
+    func onOrientationChange(notification: NSNotification){
+        myVolumeView.frame = mpVolumeViewParentView.bounds
     }
     
     func isSelectedButton(button:UIButton) -> Bool {

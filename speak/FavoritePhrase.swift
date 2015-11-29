@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import Realm
+import RealmSwift
 
-class FavoritePhrase : RLMObject {
+class FavoritePhrase : Object {
     dynamic var phrase = ""
 }

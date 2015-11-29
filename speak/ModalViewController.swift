@@ -50,9 +50,9 @@ class ModalViewController: UIViewController,UITextViewDelegate {
         self.view.addSubview(self.textView)
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        if let touch = touches.first as? UITouch {
-            if touch.view.tag == 1 {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
+            if touch.view!.tag == 1 {
                 textView.resignFirstResponder()
             }
         }
@@ -64,8 +64,8 @@ class ModalViewController: UIViewController,UITextViewDelegate {
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         let maxLength: Int = 500
-        var str = textView.text + text
-        if count("\(str)") < maxLength {
+        let str = textView.text + text
+        if "\(str)".characters.count < maxLength {
             if text != "\n" {
                 return true
             }
@@ -75,11 +75,11 @@ class ModalViewController: UIViewController,UITextViewDelegate {
             self.delegate.modalDidFinished(self.textView.text,textView: self.textView)
         } else {
             AlertBuilder(title: "文字数の上限を超えました", message: "", preferredStyle: .Alert)
-                .addAction(title: "OK", style: .Cancel) { Void in
+                .addAction("OK", style: .Cancel) { Void in
                     
                 }
                 .build()
-                .kam_show(animated: true)
+                .kam_show(true)
         }
         return false
     }

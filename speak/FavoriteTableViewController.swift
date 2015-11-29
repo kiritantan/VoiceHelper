@@ -8,12 +8,12 @@
 
 import UIKit
 import AVFoundation
-import Realm
+import RealmSwift
 
 class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,ModalViewControllerDelegate,UITableViewDelegate,UITableViewDataSource {
     
     @IBOutlet var tableView: UITableView!
-    let realm = RLMRealm.defaultRealm()
+    let realm = try! Realm()
     let speaker = SpeakModel()
     let modalView = ModalViewController()
     var textArray: NSMutableArray = []
@@ -34,8 +34,8 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         textArray = []
-        for realmPhrase in FavoritePhrase.allObjects() {
-            textArray.addObject("\((realmPhrase as! FavoritePhrase).phrase)")
+        for realmPhrase in realm.objects(FavoritePhrase) {
+            textArray.addObject("\(realmPhrase.phrase)")
         }
         tableView.reloadData()
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
@@ -54,9 +54,9 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         let indexPath = tableView.indexPathForRowAtPoint(p)
         let cell = tableView.cellForRowAtIndexPath(indexPath!)
         if indexPath?.row < textArray.count {
-            realm.beginWriteTransaction()
-            realm.deleteObjects(FavoritePhrase.objectsWhere("phrase = '\(textArray[indexPath!.row])'"))
-            realm.commitWriteTransaction()
+            try! realm.write{
+                self.realm.delete(self.realm.objects(FavoritePhrase).filter("phrase = '\(self.textArray[indexPath!.row])'"))
+            }
             modalView.phrase = textArray[indexPath!.row] as! String
             textArray.removeObjectAtIndex(indexPath!.row)
             self.presentViewController(modalView, animated: true, completion: nil)
@@ -81,7 +81,7 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
 
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) 
         if indexPath.row != textArray.count {
             cell.textLabel?.text = textArray[indexPath.row] as? String
         } else {
@@ -122,9 +122,9 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            realm.beginWriteTransaction()
-            realm.deleteObjects(FavoritePhrase.objectsWhere("phrase = '\(textArray[indexPath.row])'"))
-            realm.commitWriteTransaction()
+            try! realm.write{
+                self.realm.delete(self.realm.objects(FavoritePhrase).filter("phrase = '\(self.textArray[indexPath.row])'"))
+            }
             textArray.removeObjectAtIndex(indexPath.row)
             let delay = 0.1 * Double(NSEC_PER_SEC)
             let time  = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
@@ -136,23 +136,23 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
         }
     }
     
-    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer, didFinishSpeechUtterance utterance: AVSpeechUtterance) {
         tableView.deselectRowAtIndexPath(selectedIndexPath, animated: true)
         tableView.selectRowAtIndexPath(NSIndexPath(forRow: textArray.count + 1, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
     }
     
     func modalDidFinished(modalText: String, textView: UITextView) {
         var flag = true;
-        let results = FavoritePhrase.objectsWhere("phrase = '\(modalText)'")
-        for realmBook in results {
+        let results = realm.objects(FavoritePhrase).filter("phrase = '\(modalText)'")
+        for _ in results {
             flag = false
         }
         if flag {
             let phrase = FavoritePhrase()
             if modalText != "" {
                 phrase.phrase = modalText
-                realm.transactionWithBlock() {
-                    self.realm.addObject(phrase)
+                try! realm.write{
+                    self.realm.add(phrase)
                 }
                 textArray.addObject(modalText)
                 tableView.reloadData()
@@ -162,14 +162,14 @@ class FavoriteTableViewController: UIViewController,AVSpeechSynthesizerDelegate,
             self.modalView.dismissViewControllerAnimated(true, completion: nil)
         } else {
             AlertBuilder(title: "このフレーズは登録済みです", message: "編集を続けますか?", preferredStyle: .Alert)
-                .addAction(title: "いいえ", style: .Cancel) { Void in
+                .addAction("いいえ", style: .Cancel) { Void in
                     self.modalView.dismissViewControllerAnimated(true, completion: nil)
                 }
-                .addAction(title: "はい", style: .Default) { Void in
+                .addAction("はい", style: .Default) { Void in
                     textView.becomeFirstResponder()
                 }
                 .build()
-                .kam_show(animated: true)
+                .kam_show(true)
         }
     }
 
